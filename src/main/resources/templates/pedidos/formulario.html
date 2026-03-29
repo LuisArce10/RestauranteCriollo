@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulario Pedido</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/menu :: menu"></div>
+<div class="container">
+    <h2 th:text="${pedido.id != null} ? 'Editar Pedido' : 'Nuevo Pedido'"></h2>
+    <form th:action="@{/pedidos/guardar}" th:object="${pedido}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <label>Mozo:</label>
+        <select th:field="*{mozo.id}">
+            <option th:each="mozo : ${mozos}" th:value="${mozo.id}" th:text="${mozo.nombre}"></option>
+        </select>
+        <label>Mesa:</label>
+        <select th:field="*{mesa.id}">
+            <option th:each="mesa : ${mesas}" th:value="${mesa.id}" th:text="${mesa.numero}"></option>
+        </select>
+        <label>Estado:</label>
+        <select th:field="*{estado}">
+            <option th:value="PENDIENTE" th:text="'PENDIENTE'"></option>
+            <option th:value="EN_PROCESO" th:text="'EN PROCESO'"></option>
+            <option th:value="LISTO" th:text="'LISTO'"></option>
+            <option th:value="PAGADO" th:text="'PAGADO'"></option>
+        </select>
+        <button type="submit">Guardar</button>
+    </form>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

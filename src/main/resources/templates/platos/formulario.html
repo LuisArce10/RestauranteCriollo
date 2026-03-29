@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulario Plato</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/menu :: menu"></div>
+<div class="container">
+    <h2 th:text="${plato.id != null} ? 'Editar Plato' : 'Nuevo Plato'"></h2>
+    <form th:action="@{/platos/guardar}" th:object="${plato}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <label>Nombre:</label>
+        <input type="text" th:field="*{nombre}" required/>
+        <label>Descripción:</label>
+        <textarea th:field="*{descripcion}" required></textarea>
+        <label>Precio:</label>
+        <input type="number" step="0.01" th:field="*{precio}" required/>
+        <label>Categoría:</label>
+        <select th:field="*{categoriaPlato.id}">
+            <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
+        </select>
+        <label>URL Imagen:</label>
+        <input type="text" th:field="*{urlImagen}"/>
+        <button type="submit">Guardar</button>
+    </form>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

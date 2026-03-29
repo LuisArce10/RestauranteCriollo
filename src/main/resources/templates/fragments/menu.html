@@ -1,0 +1,63 @@
+<!-- templates/fragments/menu.html -->
+<nav th:fragment="menu"
+     xmlns:th="http://www.thymeleaf.org"
+     class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Restaurante</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Menú principal para usuarios autenticados -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"
+                th:if="${#authentication.name != 'anonymousUser'}">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Inicio</a>
+                </li>
+
+                <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMINISTRADOR'')')}">
+                    <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
+                </li>
+
+                <li class="nav-item" th:if="${#authorization.expression('hasAnyRole(''ADMINISTRADOR'',''MOZO'')')}">
+                    <a class="nav-link" th:href="@{/mesas}">Mesas</a>
+                </li>
+
+                <li class="nav-item" th:if="${#authorization.expression('hasAnyRole(''MOZO'',''ADMINISTRADOR'',''COCINERO'')')}">
+                    <a class="nav-link" th:href="@{/platos}">Platos</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pedidos}">Pedidos</a>
+                </li>
+            </ul>
+
+            <!-- Info del usuario y botón cerrar sesión -->
+            <ul class="navbar-nav ms-auto" th:if="${#authentication.name != 'anonymousUser'}">
+                <li class="nav-item d-flex align-items-center text-white me-3">
+                    <span th:text="'👤 ' + ${usuarioNombre}">Nombre</span>&nbsp;|
+                    <span th:text="${usuarioEmail}">email@example.com</span>&nbsp;|
+                    <span th:text="${usuarioRol}">ROL</span>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+                    </form>
+                </li>
+            </ul>
+
+            <!-- Botón de Iniciar sesión -->
+            <ul class="navbar-nav ms-auto" th:if="${#authentication.name == 'anonymousUser'}">
+                <li class="nav-item">
+                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Iniciar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
